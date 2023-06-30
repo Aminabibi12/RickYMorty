@@ -55,7 +55,7 @@ function loadEpisodes() {
     li.appendChild(link);
     ul.appendChild(li);
   });
-  
+
   currentIndex = nextIndex; // Update the current index
 
   if (currentIndex >= episodes.length) {
@@ -72,80 +72,82 @@ function loadEpisodes() {
 }
 
 // Fetch the episodes from the API and populate the episodes array
-fetch('https://rickandmortyapi.com/api/episode')
-  .then(response => response.json())
-  .then(data => {
+async function fetchData1() {
+  try {
+    let response = await fetch('https://rickandmortyapi.com/api/episode');
+    let data = await response.json();
     episodes = data.results.map(episode => ({
       name: episode.name,
-      description: 'Sample description' // Static description since the API does not provide it
+      description: '' // Empty description field to be filled later
     }));
     loadEpisodes(); // Load the initial episodes
-  })
-  .catch(error => {
+  } catch (error) {
     console.error('Error loading episodes:', error);
-  });
-
-  function displayEpisodeDetails(episode) {
-    // Clear existing episode details
-    episodeDetailsContainer.innerHTML = '';
-  
-    // Create elements for episode name and description
-    const episodeName = document.createElement('h2');
-    episodeName.textContent = episode.name;
-  
-    const episodeDescription = document.createElement('p');
-    episodeDescription.textContent = 'December 2, 2023 | S01E01';
-  
-    // Append the elements to the episode details container
-    episodeDetailsContainer.appendChild(episodeName);
-    episodeDetailsContainer.appendChild(episodeDescription);
-  
-    // Create and append the image container
-    const imageContainer = document.createElement('div');
-    imageContainer.style.display = 'flex';
-    imageContainer.style.flexWrap = 'wrap';
-    imageContainer.style.gap = '20px';
-  
-    // Create and append the images with text
-    for (let i = 0; i < 6; i++) {
-      const imageWrapper = document.createElement('div');
-      imageWrapper.style.position = 'relative';
-      imageWrapper.style.width = '30%'; // Adjust image width to fit two images in one row
-      imageWrapper.style.marginTop = '20px';
-      imageWrapper.style.marginLeft = '20px';
-  
-      const episodeImage = document.createElement('img');
-      episodeImage.src = "/imagex/download.jpeg";
-      episodeImage.style.width = '70%';
-      episodeImage.style.height = 'auto'; // Set height to 'auto' to maintain aspect ratio
-  
-      const imgText = document.createElement('p');
-      imgText.textContent = 'Rick Stat';
-      imgText.style.position = 'relative';
-      imgText.style.bottom = '0';
-      imgText.style.left = '0';
-      imgText.style.width = '70%'; // Adjusted width to '100%'
-      imgText.style.padding = '5px';
-      imgText.style.color = '#000000';
-      imgText.style.fontWeight = 'bold';
-      imgText.style.textAlign = 'center';
-
-  
-      const additionalText = document.createElement('p');
-      additionalText.textContent = 'Human | Alive';
-      additionalText.style.marginTop = '2px'; 
-      additionalText.style.textAlign = 'center'; 
-      additionalText.style.marginRight = '100px';   
-  
-      imageWrapper.appendChild(episodeImage);
-      imageWrapper.appendChild(imgText);
-      imageWrapper.appendChild(additionalText);
-      imageContainer.appendChild(imageWrapper);
-    }
-  
-    episodeDetailsContainer.appendChild(imageContainer);
   }
-  
+}
+
+fetchData1();
+
+// Fetch additional data from another API and update the description field
+async function fetchData2() {
+  try {
+    let response = await fetch('https://rickandmortyapi.com/api/character');
+    let data = await response.json();
+    episodes.forEach((episode, index) => {
+      episode.description = data.results[index].description;
+    });
+  } catch (error) {
+    console.error('Error fetching additional data:', error);
+  }
+}
+
+fetchData2();
+
+function displayEpisodeDetails(episode) {
+  // Clear existing episode details
+  episodeDetailsContainer.innerHTML = '';
+
+  // Create elements for episode name and description
+  const episodeName = document.createElement('h2');
+  episodeName.textContent = episode.name;
+
+  const episodeDescription = document.createElement('p');
+  episodeDescription.textContent = episode.description;
+
+  // Append the elements to the episode details container
+  episodeDetailsContainer.appendChild(episodeName);
+  episodeDetailsContainer.appendChild(episodeDescription);
+
+  // Create and append the image container
+  const imageContainer = document.createElement('div');
+  imageContainer.style.display = 'flex';
+  imageContainer.style.flexWrap = 'wrap';
+  imageContainer.style.gap = '20px';
+
+  // Create and append the images with text
+  for (let i = 0; i < 6; i++) {
+    const imageWrapper = document.createElement('div');
+    imageWrapper.style.position = 'relative';
+    imageWrapper.style.width = '30%'; // Adjust image width to fit two images in one row
+    imageWrapper.style.marginTop = '20px';
+    imageWrapper.style.marginLeft = '20px';
+
+    const episodeImage = document.createElement('img');
+    episodeImage.src = "/imagex/download.jpeg";
+    episodeImage.style.width = '70%';
+    episodeImage.style.height = 'auto'; // Set height to 'auto' to maintain aspect ratio
+
+    const imgText = document.createElement('p');
+    imgText.textContent = 'Description';
+
+    imageWrapper.appendChild(episodeImage);
+    imageWrapper.appendChild(imgText);
+    imageContainer.appendChild(imageWrapper);
+  }
+
+  episodeDetailsContainer.appendChild(imageContainer);
+}
+
 container.appendChild(sidebarContainer);
 container.appendChild(episodeDetailsContainer);
 sidebarContainer.appendChild(Sidebar);
