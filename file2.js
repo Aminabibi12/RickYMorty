@@ -143,12 +143,12 @@ async function displayEpisodeDetails(episode) {
             episodeImage.src = characterImage;
             episodeImage.style.width = '30%';
             episodeImage.style.height = 'auto';
-            episodeImage.style.marginBottom = '5px'; 
+            episodeImage.style.marginBottom = '5px';
             episodeImage.addEventListener('click', () => displayCharacterInfo(characterData))
-
+            
             imageWrapper.appendChild(episodeImage);
             episodeDetailsContainer.appendChild(imageWrapper);
-            
+
 
             //create and append the character name.
             const imgText = document.createElement('p');
@@ -161,33 +161,40 @@ async function displayEpisodeDetails(episode) {
         }
     }
     function displayCharacterInfo(character) {
-      episodeDetailsContainer.innerHTML = '';
-    
-      // Create elements for character information
-      const nameElem = document.createElement('h2');
-      nameElem.textContent = `Name: ${character.name}`;
-    
-      const statusElem = document.createElement('p');
-      statusElem.textContent = `Status: ${character.status}`;
-    
-      const speciesElem = document.createElement('p');
-      speciesElem.textContent = `Species: ${character.species}`;
-    
-      const genderElem = document.createElement('p');
-      genderElem.textContent = `Gender: ${character.gender}`;
-    
-      const originElem = document.createElement('p');
-      originElem.textContent = `Origin: ${character.origin.name}`;
-    
-      // Append the elements to the episode details container
-      episodeDetailsContainer.appendChild(nameElem);
-      episodeDetailsContainer.appendChild(statusElem);
-      episodeDetailsContainer.appendChild(speciesElem);
-      episodeDetailsContainer.appendChild(genderElem);
-      episodeDetailsContainer.appendChild(originElem);
-    }
-    
+        episodeDetailsContainer.innerHTML = '';
+      
+        // Create elements for character information
+        
+        const charImg = document.createElement('img');
+        charImg.src = character.image;
+        charImg.style.height = '25%';
 
+        const nameElem = document.createElement('h2');
+        nameElem.textContent = `Name: ${character.name}`;
+
+        const statusElem = document.createElement('p');
+        statusElem.textContent = `Status: ${character.status}`;
+      
+        const speciesElem = document.createElement('p');
+        speciesElem.textContent = `Species: ${character.species}`;
+      
+        const genderElem = document.createElement('p');
+        genderElem.textContent = `Gender: ${character.gender}`;
+      
+        const originElem = document.createElement('p');
+        originElem.textContent = `Origin: ${character.origin.name}`;
+      
+        // Append the elements to the episode details container
+        episodeDetailsContainer.appendChild(charImg);
+        episodeDetailsContainer.appendChild(nameElem);
+        episodeDetailsContainer.appendChild(statusElem);
+        episodeDetailsContainer.appendChild(speciesElem);
+        episodeDetailsContainer.appendChild(genderElem);
+        episodeDetailsContainer.appendChild(originElem);
+
+        
+      }
+      
     
 document.body.appendChild(header);  
 container.appendChild(sidebarContainer);
